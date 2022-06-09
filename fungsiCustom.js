@@ -19,37 +19,36 @@ let modifyFile3 = (val) => {
 
 //TODO: Kerjakan bacaData
 //gunakan variabel file1, file2, dan file3
-const bacaData = (fnCallback) =>{
+const bacaData = (fnCallback) =>{ 
   const arrHasil = [];
 
   fs.readFile(file1, "utf-8", (err, data1) =>{
-    const arrObj = JSON.parse(data1).message.split(" ");
-
-    if(arrObj.length > 2){
-      fnCallback("Message lebih dari 2 karakter", null);
-      return;
-    }else{
-        arrHasil.push(arrObj[1]);
+    if (err) {
+      return fnCallback('Error data 1' + err, null);
     }
 
     fs.readFile(file2, "utf-8", (err, data2) =>{
-      const arrObj = JSON.parse(data2)[0].message.split(" ");
-      if(arrObj.length > 2){
-        fnCallback("Message lebih dari 2 karakter", null);
-        return;
-      }else{
-        arrHasil.push(arrObj[1]);
+      if (err) {
+        return fnCallback('Error data 2' + err, null);
       }
 
       fs.readFile(file3, "utf-8", (err, data3) =>{
-        const arrObj = JSON.parse(data3)[0].data.message.split(" ");
-        if(arrObj.length > 2){
-          fnCallback("Message lebih dari 2 karakter", null);
-          return;
-        }else{
-          arrHasil.push(arrObj[1]);
+        if (err) {
+          return fnCallback('Error data 3' + err, null);
         }
 
+        const arrObj1 = JSON.parse(data1).message.split(" ");
+        const arrObj2 = JSON.parse(data2)[0].message.split(" ");
+        const arrObj3 = JSON.parse(data3)[0].data.message.split(" ");
+
+        if(arrObj1.length > 2 || arrObj2.length > 2 || arrObj3.length > 2){
+          return fnCallback("Message lebih dari 2 karakter", null); 
+        }else{
+            arrHasil.push(arrObj1[1]);
+            arrHasil.push(arrObj2[1]);
+            arrHasil.push(arrObj3[1]);
+        }
+        
         fnCallback(null, arrHasil);
 
       });
